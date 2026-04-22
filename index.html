@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Spark | Votre Agence Digitale Locale</title>
+    <style>
+        /* --- Styles Généraux --- */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        :root {
+            --primary: #38bdf8; /* Bleu ciel moderne */
+            --primary-dark: #0284c7;
+            --bg-color: #f8fafc; /* Gris très clair */
+            --white: #ffffff;
+            --text-main: #334155;
+            --text-light: #64748b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        
+        /* --- Navigation --- */
+        header {
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 10%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .logo span { color: var(--primary); }
+
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { font-weight: 600; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        .btn {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background-color: var(--primary-dark); }
+
+        /* --- Sections communes --- */
+        section {
+            padding: 100px 10%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 50px;
+            color: var(--primary-dark);
+        }
+
+        /* --- Accueil (Hero) --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #e0f2fe 100%);
+            padding-top: 80px;
+        }
+        .hero h1 { font-size: 48px; margin-bottom: 20px; line-height: 1.2; }
+        .hero p { font-size: 18px; color: var(--text-light); margin-bottom: 30px; max-width: 600px; }
+
+        /* --- Services --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .service-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+        .service-card:hover { transform: translateY(-10px); }
+        .service-card h3 { margin-bottom: 15px; }
+
+        /* --- Portfolio --- */
+        .portfolio { background-color: var(--white); }
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .portfolio-item {
+            background: var(--bg-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .portfolio-img {
+            width: 100%;
+            height: 200px;
+            background-color: #cbd5e1; /* Gris placeholder pour image */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-style: italic;
+        }
+        .portfolio-info { padding: 20px; }
+
+        /* --- Tarifs --- */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .pricing-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border: 2px solid var(--primary);
+        }
+        .price { font-size: 36px; font-weight: 700; color: var(--primary-dark); margin: 20px 0; }
+        .pricing-features { list-style: none; margin-bottom: 30px; color: var(--text-light); }
+        .pricing-features li { margin-bottom: 10px; }
+
+        /* --- Contact --- */
+        .contact { background-color: var(--white); }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+        textarea { resize: vertical; height: 150px; }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--text-main);
+            color: var(--white);
+            text-align: center;
+            padding: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo">Next<span>Spark</span></div>
+            <div class="nav-links">
+                <a href="#accueil">Accueil</a>
+                <a href="#services">Services</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#tarifs">Tarifs</a>
+            </div>
+            <a href="#contact" class="btn">Demander un devis</a>
+        </nav>
+    </header>
+
+    <section id="accueil" class="hero">
+        <h1>Propulsez votre commerce local sur le web.</h1>
+        <p>Next Spark crée des sites internet professionnels et gère vos réseaux sociaux (Instagram, TikTok, Facebook) à des tarifs adaptés aux petites entreprises.</p>
+        <a href="#services" class="btn">Découvrir nos solutions</a>
+    </section>
+
+    <section id="services">
+        <h2 class="section-title">Ce que nous faisons</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Création de Sites Web</h3>
+                <p>Des sites vitrines ou e-commerce modernes, rapides et optimisés pour mobiles. Idéal pour attirer de nouveaux clients dans votre boutique.</p>
+            </div>
+            <div class="service-card">
+                <h3>Gestion Réseaux Sociaux</h3>
+                <p>Création de contenu, posts réguliers et interaction sur Instagram, TikTok et Facebook pour fidéliser votre communauté.</p>
+            </div>
+            <div class="service-card">
+                <h3>Référencement (SEO)</h3>
+                <p>Optimisation de votre présence en ligne pour apparaître en premier sur Google quand on cherche vos services dans votre ville.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="portfolio" class="portfolio">
+        <h2 class="section-title">Nos Réalisations</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">
+                <div class="portfolio-img">[Image du site "Le Fournil de Jacques"]</div>
+                <div class="portfolio-info">
+                    <h3>Boulangerie Le Fournil</h3>
+                    <p>Site vitrine & création du compte Instagram (Croissance de +400 abonnés locaux en 1 mois).</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">[Image du site "Auto Rép"]</div>
+                <div class="portfolio-info">
+                    <h3>Garage Auto Rép</h3>
+                    <p>Site avec système de prise de rendez-vous en ligne et optimisation SEO locale.</p>
+                </div>
+            </div>
+            <div class="portfolio-item">
+                <div class="portfolio-img">[Image d'une campagne TikTok]</div>
+                <div class="portfolio-info">
+                    <h3>Boutique de vêtements "Lumière"</h3>
+                    <p>Boutique e-commerce et gestion de campagnes publicitaires sur TikTok et Facebook.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tarifs">
+        <h2 class="section-title">Des tarifs transparents</h2>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>Pack Présence</h3>
+                <div class="price">299€</div>
+                <ul class="pricing-features">
+                    <li>Site vitrine "One-Page"</li>
+                    <li>Design Responsive</li>
+                    <li>Formulaire de contact</li>
+                    <li>Configuration Google My Business</li>
+                </ul>
+                <a href="#contact" class="btn" style="background-color: var(--text-main);">Choisir ce pack</a>
+            </div>
+            <div class="pricing-card featured">
+                <h3>Pack Dynamique</h3>
+                <div class="price">499€</div>
+                <ul class="pricing-features">
+                    <li>Site web complet (5 pages)</li>
+                    <li>Optimisation SEO basique</li>
+                    <li>Création des pages réseaux sociaux</li>
+                    <li>1 mois d'accompagnement digital</li>
+                </ul>
+                <a href="#contact" class="btn">Choisir ce pack</a>
+            </div>
+            <div class="pricing-card">
+                <h3>Pack Sur-Mesure</h3>
+                <div class="price">Sur devis</div>
+                <ul class="pricing-features">
+                    <li>E-commerce ou fonctionnalités avancées</li>
+                    <li>Gestion mensuelle des réseaux (TikTok, IG)</li>
+                    <li>Campagnes publicitaires</li>
+                    <li>Stratégie digitale complète</li>
+                </ul>
+                <a href="#contact" class="btn" style="background-color: var(--text-main);">Nous contacter</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">Prêt à faire décoller votre activité ?</h2>
+        <form>
+            <input type="text" placeholder="Votre nom / Nom de votre commerce" required>
+            <input type="email" placeholder="Votre adresse e-mail" required>
+            <select style="padding: 15px; border: 1px solid #cbd5e1; border-radius: 5px;">
+                <option value="">Quel service vous intéresse ?</option>
+                <option value="site">Création de site web</option>
+                <option value="rs">Réseaux sociaux</option>
+                <option value="global">Stratégie globale (Site + RS)</option>
+            </select>
+            <textarea placeholder="Parlez-nous un peu de votre projet..." required></textarea>
+            <button type="submit" class="btn">Envoyer la demande</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Next Spark. Tous droits réservés.</p>
+        <p style="font-size: 14px; margin-top: 10px; color: #cbd5e1;">L'alternative digitale accessible pour les commerçants locaux.</p>
+    </footer>
+
+</body>
+</html>
