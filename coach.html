@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Fit | Coaching Sportif Personnel</title>
+    <style>
+        /* Polices dynamiques et modernes */
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@300;400;700&display=swap');
+        
+        :root {
+            --primary: #38bdf8; /* Bleu ciel Next Spark */
+            --dark: #0f172a;
+            --gray: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            color: var(--dark); 
+            background: var(--gray); 
+            line-height: 1.6; 
+        }
+
+        h1, h2, h3 { 
+            font-family: 'Oswald', sans-serif; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+        }
+
+        /* --- En-tête --- */
+        header { 
+            background: var(--dark); 
+            color: var(--white); 
+            padding: 20px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 100;
+        }
+        
+        .logo { font-size: 28px; font-weight: 700; }
+        .logo span { color: var(--primary); }
+        
+        nav a { 
+            color: var(--white); 
+            text-decoration: none; 
+            margin-left: 20px; 
+            font-weight: 700; 
+            transition: color 0.3s; 
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        nav a:hover { color: var(--primary); }
+
+        /* --- Section Hero --- */
+        .hero { 
+            background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.85)), url('PLACEHOLDER_PHOTO_SALLE_SPORT') center/cover; 
+            height: 80vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            color: var(--white); 
+            padding: 0 20px; 
+        }
+        
+        .hero h1 { font-size: 4rem; margin-bottom: 20px; line-height: 1.1; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; max-width: 600px; color: #cbd5e1; }
+        
+        .btn { 
+            background: var(--primary); 
+            color: var(--dark); 
+            padding: 15px 35px; 
+            text-decoration: none; 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            border-radius: 5px; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            transition: all 0.3s; 
+        }
+        .btn:hover { background: var(--white); transform: scale(1.05); }
+
+        /* --- Sections communes --- */
+        .section { padding: 80px 5%; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; font-size: 2.5rem; margin-bottom: 50px; color: var(--dark); }
+
+        /* --- Prestations --- */
+        .services { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .card { 
+            background: var(--white); 
+            padding: 40px; 
+            border-radius: 10px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            text-align: center; 
+            border-bottom: 4px solid transparent; 
+            transition: 0.3s; 
+        }
+        .card:hover { border-bottom-color: var(--primary); transform: translateY(-10px); }
+        .card h3 { font-size: 1.5rem; margin-bottom: 15px; color: var(--dark); }
+        .card p { color: #64748b; }
+
+        /* --- Outil Interactif (IMC) --- */
+        .interactive-tool { 
+            background: var(--dark); 
+            color: var(--white); 
+            padding: 80px 5%; 
+            text-align: center; 
+        }
+        .tool-container { 
+            background: rgba(255,255,255,0.05); 
+            padding: 40px; 
+            max-width: 500px; 
+            margin: 0 auto; 
+            border-radius: 10px; 
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .tool-container h3 { margin-bottom: 20px; color: var(--primary); }
+        .tool-container input { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border: none; 
+            border-radius: 5px; 
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        #imc-result { 
+            margin-top: 20px; 
+            font-size: 1.2rem; 
+            font-weight: bold; 
+            padding: 15px;
+            border-radius: 5px;
+            display: none; /* Masqué par défaut */
+        }
+
+        /* --- Footer --- */
+        footer { 
+            background: #020617; 
+            color: #64748b; 
+            text-align: center; 
+            padding: 30px; 
+            font-size: 0.9rem; 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">ALEX<span>FIT</span></div>
+        <nav>
+            <a href="#services">Programmes</a>
+            <a href="#imc">Outil IMC</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Dépasse tes <span>limites</span></h1>
+        <p>Coaching personnalisé, programmes sur-mesure et suivi nutritionnel pour atteindre tes objectifs physiques.</p>
+        <a href="#contact" class="btn">Réserver une séance d'essai</a>
+    </section>
+
+    <section id="services" class="section">
+        <h2 class="section-title">Mes Programmes</h2>
+        <div class="services">
+            <div class="card">
+                <h3>Perte de poids</h3>
+                <p>Un programme cardio et renforcement musculaire ciblé pour brûler les graisses efficacement, accompagné d'un plan alimentaire.</p>
+            </div>
+            <div class="card">
+                <h3>Prise de masse</h3>
+                <p>Des entraînements lourds et intenses pour construire du muscle solide. Technique, volume et surcharge progressive.</p>
+            </div>
+            <div class="card">
+                <h3>Coaching à distance</h3>
+                <p>Où que tu sois, reçois ton programme sur ton téléphone avec vidéos d'exécution et bilan hebdomadaire en visio.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="imc" class="interactive-tool">
+        <h2 class="section-title" style="color: var(--white);">Calcule ton point de départ</h2>
+        <div class="tool-container">
+            <h3>Calculateur d'IMC</h3>
+            <p style="margin-bottom: 20px; font-size: 0.9rem; color: #cbd5e1;">L'Indice de Masse Corporelle est un indicateur pour évaluer ta corpulence.</p>
+            
+            <input type="number" id="poids" placeholder="Ton poids (en kg)" required>
+            <input type="number" id="taille" placeholder="Ta taille (en cm)" required>
+            
+            <button class="btn" onclick="calculerIMC()" style="width: 100%; margin-top: 10px;">Calculer</button>
+            
+            <div id="imc-result"></div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Alex Fit Coaching. Site propulsé par Next Spark.
+    </footer>
+
+    <script>
+        function calculerIMC() {
+            const poids = parseFloat(document.getElementById('poids').value);
+            const tailleCm = parseFloat(document.getElementById('taille').value);
+            const resultDiv = document.getElementById('imc-result');
+
+            if (!poids || !tailleCm || poids <= 0 || tailleCm <= 0) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.backgroundColor = '#ef4444'; // Rouge
+                resultDiv.style.color = 'white';
+                resultDiv.innerHTML = "Merci d'entrer des valeurs valides.";
+                return;
+            }
+
+            const tailleM = tailleCm / 100;
+            const imc = (poids / (tailleM * tailleM)).toFixed(1);
+            
+            let message = "";
+            let color = "";
+
+            if (imc < 18.5) {
+                message = "Insuffisance pondérale";
+                color = "#f59e0b"; // Orange
+            } else if (imc >= 18.5 && imc < 25) {
+                message = "Corpulence normale";
+                color = "#10b981"; // Vert
+            } else if (imc >= 25 && imc < 30) {
+                message = "Surpoids";
+                color = "#f59e0b"; // Orange
+            } else {
+                message = "Obésité";
+                color = "#ef4444"; // Rouge
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.style.backgroundColor = 'rgba(255,255,255,0.1)';
+            resultDiv.style.color = 'white';
+            resultDiv.innerHTML = `Ton IMC est de <span style="color: ${color}; font-size: 1.5rem;">${imc}</span><br><span style="font-size: 1rem; font-weight: normal;">${message}</span>`;
+        }
+    </script>
+</body>
+</html>
