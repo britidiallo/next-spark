@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lumière | Vêtements Modernes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #38bdf8; /* Bleu ciel */
+            --bg-light: #f8fafc;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --sale-red: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); }
+
+        /* --- Navigation --- */
+        header {
+            background-color: var(--white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 24px; font-weight: 700; letter-spacing: 1px; cursor: pointer; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links button { background: none; border: none; font-size: 16px; font-weight: 600; cursor: pointer; color: var(--text-dark); transition: color 0.3s; }
+        .nav-links button:hover { color: var(--primary); }
+        .cart-btn { position: relative; }
+        .cart-count {
+            position: absolute; top: -8px; right: -12px;
+            background: var(--primary); color: var(--white);
+            font-size: 12px; padding: 2px 6px; border-radius: 50%; font-weight: bold;
+        }
+
+        /* --- Vues (Pages simulées) --- */
+        .view { display: none; padding: 40px 5%; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
+        .view.active { display: block; }
+
+        /* --- Boutique --- */
+        .filters { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
+        .filter-btn {
+            padding: 8px 16px; border: 1px solid #cbd5e1; background: var(--white);
+            border-radius: 20px; cursor: pointer; transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px; }
+        .product-card {
+            background: var(--white); border-radius: 10px; overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.3s;
+        }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-img { width: 100%; height: 300px; background-color: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative; }
+        .badge-sale { position: absolute; top: 10px; left: 10px; background: var(--sale-red); color: var(--white); padding: 5px 10px; font-size: 12px; font-weight: bold; border-radius: 5px; }
+        .product-info { padding: 15px; }
+        .product-title { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
+        .price-container { display: flex; gap: 10px; align-items: center; }
+        .price { font-weight: 700; color: var(--primary); font-size: 18px; }
+        .old-price { text-decoration: line-through; color: var(--text-muted); font-size: 14px; }
+
+        /* --- Modal Produit (Détails) --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: var(--white); width: 90%; max-width: 900px; border-radius: 10px;
+            display: flex; flex-wrap: wrap; overflow: hidden; position: relative; max-height: 90vh; overflow-y: auto;
+        }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; z-index: 10; border: none; background: none;}
+        .modal-gallery { flex: 1; min-width: 300px; padding: 20px; }
+        .main-img { width: 100%; height: 400px; background: #e2e8f0; margin-bottom: 10px; border-radius: 5px; display: flex; align-items: center; justify-content: center;}
+        .thumbnails { display: flex; gap: 10px; }
+        .thumb { width: 60px; height: 60px; background: #cbd5e1; cursor: pointer; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px;}
+        .modal-details { flex: 1; min-width: 300px; padding: 40px 20px; }
+        .modal-title { font-size: 28px; margin-bottom: 10px; }
+        .sizes { display: flex; gap: 10px; margin: 20px 0; }
+        .size-btn { padding: 10px 15px; border: 1px solid #cbd5e1; background: none; cursor: pointer; border-radius: 5px; }
+        .size-btn.selected { border-color: var(--primary); background: var(--primary); color: var(--white); }
+        .add-to-cart-btn { width: 100%; padding: 15px; background: var(--text-dark); color: var(--white); border: none; font-size: 16px; font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.3s; }
+        .add-to-cart-btn:hover { background: var(--primary); }
+
+        /* --- Panier --- */
+        .cart-item { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #e2e8f0; }
+        .cart-total { font-size: 20px; font-weight: bold; text-align: right; margin-top: 20px; }
+
+        /* --- Contact --- */
+        .contact-form { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
+        .contact-form input, .contact-form textarea { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 5px; }
+        .contact-form button { padding: 15px; background: var(--primary); color: var(--white); border: none; font-weight: bold; border-radius: 5px; cursor: pointer; }
+
+        footer { text-align: center; padding: 20px; background: var(--white); color: var(--text-muted); font-size: 14px; margin-top: 40px;}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" onclick="switchView('shop')">LUMIÈRE<span>.</span></div>
+        <div class="nav-links">
+            <button onclick="switchView('shop')">Boutique</button>
+            <button onclick="switchView('contact')">Contact</button>
+            <button class="cart-btn" onclick="switchView('cart')">
+                Panier <span class="cart-count" id="cart-counter">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main id="shop-view" class="view active">
+        <div class="filters" id="filters-container">
+            <button class="filter-btn active" onclick="filterProducts('all')">Tout voir</button>
+            <button class="filter-btn" onclick="filterProducts('T-Shirt')">T-Shirts</button>
+            <button class="filter-btn" onclick="filterProducts('Pantalon')">Pantalons</button>
+            <button class="filter-btn" onclick="filterProducts('sale')">Promotions</button>
+        </div>
+        <div class="product-grid" id="product-grid">
+            </div>
+    </main>
+
+    <main id="cart-view" class="view">
+        <h2>Votre Panier</h2>
+        <div id="cart-container" style="margin-top: 20px;">
+            </div>
+        <div class="cart-total" id="cart-total">Total: 0.00 €</div>
+        <button class="add-to-cart-btn" style="margin-top: 20px; max-width: 300px; float: right;">Valider la commande</button>
+        <div style="clear: both;"></div>
+    </main>
+
+    <main id="contact-view" class="view">
+        <h2 style="text-align: center; margin-bottom: 30px;">Nous contacter</h2>
+        <form class="contact-form" onsubmit="event.preventDefault(); alert('Message envoyé !');">
+            <input type="text" placeholder="Votre nom" required>
+            <input type="email" placeholder="Votre email" required>
+            <textarea rows="5" placeholder="Votre message" required></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </main>
+
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div class="modal-gallery">
+                <div class="main-img" id="modal-main-img">Image 1</div>
+                <div class="thumbnails" id="modal-thumbnails">
+                    </div>
+            </div>
+            <div class="modal-details">
+                <h2 class="modal-title" id="modal-title">Nom du produit</h2>
+                <div class="price-container" style="margin-bottom: 20px;">
+                    <div class="price" id="modal-price">0.00 €</div>
+                </div>
+                <p style="color: var(--text-muted); line-height: 1.6;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Qualité premium, coupe moderne.</p>
+                
+                <h4 style="margin-top: 20px;">Tailles</h4>
+                <div class="sizes" id="modal-sizes">
+                    </div>
+                
+                <button class="add-to-cart-btn" id="modal-add-btn">Ajouter au panier</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Lumière - Créé par Next Spark
+    </footer>
+
+    <script>
+        // --- DONNÉES PRODUITS ---
+        const products = [
+            { id: 1, name: "T-Shirt Essential Blanc", price: 25.00, oldPrice: null, category: "T-Shirt", sizes: ["S", "M", "L", "XL"], images: ["Face", "Dos", "Détail"] },
+            { id: 2, name: "Pantalon Cargo Noir", price: 45.00, oldPrice: 60.00, category: "Pantalon", sizes: ["38", "40", "42", "44"], images: ["Face", "Côté"] },
+            { id: 3, name: "T-Shirt Oversize Bleu Ciel", price: 29.99, oldPrice: null, category: "T-Shirt", sizes: ["M", "L"], images: ["Face", "Zoom Tissu"] },
+            { id: 4, name: "Jean Coupe Droite", price: 55.00, oldPrice: 75.00, category: "Pantalon", sizes: ["38", "40", "42"], images: ["Face", "Dos", "Poche"] }
+        ];
+
+        let cart = [];
+        let currentProduct = null;
+        let selectedSize = null;
+
+        // --- FONCTIONS D'AFFICHAGE ---
+        function renderProducts(filter = 'all') {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = '';
+
+            const filtered = products.filter(p => {
+                if (filter === 'all') return true;
+                if (filter === 'sale') return p.oldPrice !== null;
+                return p.category === filter;
+            });
+
+            filtered.forEach(p => {
+                const isSale = p.oldPrice ? `<div class="badge-sale">Promo</div>` : '';
+                const priceHTML = p.oldPrice 
+                    ? `<div class="price">${p.price.toFixed(2)} €</div><div class="old-price">${p.oldPrice.toFixed(2)} €</div>`
+                    : `<div class="price">${p.price.toFixed(2)} €</div>`;
+
+                grid.innerHTML += `
+                    <div class="product-card" onclick="openModal(${p.id})">
+                        <div class="product-img">
+                            ${isSale}
+                            [Photo ${p.name}]
+                        </div>
+                        <div class="product-info">
+                            <div class="product-title">${p.name}</div>
+                            <div class="price-container">${priceHTML}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProducts(filter);
+        }
+
+        // --- LOGIQUE DU MODAL (Détails produit) ---
+        function openModal(id) {
+            currentProduct = products.find(p => p.id === id);
+            selectedSize = null;
+
+            document.getElementById('modal-title').innerText = currentProduct.name;
+            document.getElementById('modal-price').innerText = currentProduct.price.toFixed(2) + " €";
+            
+            // Gérer les images
+            document.getElementById('modal-main-img').innerText = currentProduct.images[0];
+            const thumbsContainer = document.getElementById('modal-thumbnails');
+            thumbsContainer.innerHTML = '';
+            currentProduct.images.forEach(img => {
+                thumbsContainer.innerHTML += `<div class="thumb" onclick="document.getElementById('modal-main-img').innerText = '${img}'">${img}</div>`;
+            });
+
+            // Gérer les tailles
+            const sizesContainer = document.getElementById('modal-sizes');
+            sizesContainer.innerHTML = '';
+            currentProduct.sizes.forEach(size => {
+                sizesContainer.innerHTML += `<button class="size-btn" onclick="selectSize(this, '${size}')">${size}</button>`;
+            });
+
+            document.getElementById('product-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.remove('active');
+        }
+
+        function selectSize(btn, size) {
+            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedSize = size;
+        }
+
+        // --- LOGIQUE DU PANIER ---
+        document.getElementById('modal-add-btn').addEventListener('click', () => {
+            if (!selectedSize) {
+                alert("Veuillez sélectionner une taille.");
+                return;
+            }
+            cart.push({ ...currentProduct, selectedSize });
+            updateCart();
+            closeModal();
+            alert(`${currentProduct.name} ajouté au panier !`);
+        });
+
+        function updateCart() {
+            document.getElementById('cart-counter').innerText = cart.length;
+            const container = document.getElementById('cart-container');
+            container.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = "<p>Votre panier est vide.</p>";
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    container.innerHTML += `
+                        <div class="cart-item">
+                            <div><strong>${item.name}</strong> (Taille: ${item.selectedSize})</div>
+                            <div>${item.price.toFixed(2)} € <button onclick="removeFromCart(${index})" style="margin-left: 10px; color: red; border: none; background: none; cursor: pointer;">X</button></div>
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('cart-total').innerText = `Total: ${total.toFixed(2)} €`;
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCart();
+        }
+
+        // --- GESTION DES VUES (Navigation) ---
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(viewId + '-view').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Initialisation
+        renderProducts();
+        updateCart();
+    </script>
+</body>
+</html>
