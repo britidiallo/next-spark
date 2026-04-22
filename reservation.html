@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ciseaux & Co | Réservation en ligne</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #38bdf8; /* Ton bleu Next Spark */
+            --primary-dark: #0284c7;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --white: #ffffff;
+            --border: #e2e8f0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); display: flex; flex-direction: column; min-height: 100vh; }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--white);
+            padding: 20px 5%;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .logo { font-size: 28px; font-weight: 700; color: var(--text-dark); }
+        .logo span { color: var(--primary); }
+
+        /* --- Container Principal --- */
+        main { flex-grow: 1; display: flex; justify-content: center; padding: 40px 20px; }
+        .booking-container {
+            background: var(--white);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Progress Bar --- */
+        .progress-bar {
+            display: flex;
+            background: var(--bg-light);
+            border-bottom: 1px solid var(--border);
+        }
+        .step-indicator {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-muted);
+            position: relative;
+        }
+        .step-indicator.active { color: var(--primary); background: var(--white); border-bottom: 3px solid var(--primary); }
+
+        /* --- Etapes (Vues) --- */
+        .step-content { padding: 40px; display: none; }
+        .step-content.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h2 { margin-bottom: 25px; font-size: 22px; text-align: center; }
+
+        /* --- Etape 1 : Prestations --- */
+        .services-list { display: flex; flex-direction: column; gap: 15px; }
+        .service-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .service-card:hover { border-color: var(--primary); background: #f0f9ff; }
+        .service-card.selected { border-color: var(--primary); background: #e0f2fe; }
+        .service-info h3 { font-size: 16px; margin-bottom: 5px; }
+        .service-info p { font-size: 13px; color: var(--text-muted); }
+        .service-price { font-weight: 700; color: var(--primary-dark); font-size: 18px; }
+
+        /* --- Etape 2 : Créneaux --- */
+        .date-picker { text-align: center; margin-bottom: 30px; font-weight: 600; font-size: 18px; }
+        .time-slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px; }
+        .time-slot {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .time-slot:hover { border-color: var(--primary); color: var(--primary); }
+        .time-slot.selected { background: var(--primary); color: var(--white); border-color: var(--primary); }
+        .time-slot.disabled { background: var(--bg-light); color: #cbd5e1; cursor: not-allowed; text-decoration: line-through; border-color: var(--border); }
+
+        /* --- Etape 3 : Formulaire --- */
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; outline: none; transition: border 0.3s; }
+        .form-group input:focus { border-color: var(--primary); }
+        .summary { background: var(--bg-light); padding: 20px; border-radius: 8px; margin-bottom: 25px; font-size: 14px; }
+        .summary span { font-weight: 700; color: var(--primary-dark); }
+
+        /* --- Boutons --- */
+        .btn-container { display: flex; justify-content: space-between; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .btn { padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; border: none; }
+        .btn-prev { background: var(--bg-light); color: var(--text-dark); }
+        .btn-prev:hover { background: #e2e8f0; }
+        .btn-next { background: var(--primary); color: var(--white); }
+        .btn-next:hover { background: var(--primary-dark); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* --- Footer --- */
+        footer { text-align: center; padding: 20px; font-size: 13px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Ciseaux<span>&</span>Co</div>
+        <p style="font-size: 14px; color: var(--text-muted); margin-top: 5px;">Réservation en ligne 24/7</p>
+    </header>
+
+    <main>
+        <div class="booking-container">
+            <div class="progress-bar">
+                <div class="step-indicator active" id="ind-1">1. Prestation</div>
+                <div class="step-indicator" id="ind-2">2. Créneau</div>
+                <div class="step-indicator" id="ind-3">3. Coordonnées</div>
+            </div>
+
+            <div class="step-content active" id="step-1">
+                <h2>Que souhaitez-vous faire ?</h2>
+                <div class="services-list">
+                    <div class="service-card" onclick="selectService('Coupe Homme', 25)">
+                        <div class="service-info">
+                            <h3>Coupe Homme Classique</h3>
+                            <p>Shampoing, coupe, coiffage (30 min)</p>
+                        </div>
+                        <div class="service-price">25 €</div>
+                    </div>
+                    <div class="service-card" onclick="selectService('Taille de Barbe', 15)">
+                        <div class="service-info">
+                            <h3>Taille de Barbe</h3>
+                            <p>Traçage, rasage serviette chaude (20 min)</p>
+                        </div>
+                        <div class="service-price">15 €</div>
+                    </div>
+                    <div class="service-card" onclick="selectService('Forfait Coupe + Barbe', 35)">
+                        <div class="service-info">
+                            <h3>Forfait Coupe + Barbe</h3>
+                            <p>La totale pour être impeccable (45 min)</p>
+                        </div>
+                        <div class="service-price">35 €</div>
+                    </div>
+                </div>
+                <div class="btn-container" style="justify-content: flex-end;">
+                    <button class="btn btn-next" id="btn-next-1" disabled onclick="goToStep(2)">Choisir un créneau ➔</button>
+                </div>
+            </div>
+
+            <div class="step-content" id="step-2">
+                <h2>Choisissez votre créneau</h2>
+                <div class="date-picker">Aujourd'hui</div>
+                <div class="time-slots">
+                    <div class="time-slot disabled">09:00</div>
+                    <div class="time-slot disabled">09:30</div>
+                    <div class="time-slot" onclick="selectSlot('10:00', this)">10:00</div>
+                    <div class="time-slot" onclick="selectSlot('10:30', this)">10:30</div>
+                    <div class="time-slot" onclick="selectSlot('11:00', this)">11:00</div>
+                    <div class="time-slot disabled">11:30</div>
+                    <div class="time-slot" onclick="selectSlot('14:00', this)">14:00</div>
+                    <div class="time-slot" onclick="selectSlot('14:30', this)">14:30</div>
+                    <div class="time-slot" onclick="selectSlot('15:00', this)">15:00</div>
+                    <div class="time-slot" onclick="selectSlot('15:30', this)">15:30</div>
+                    <div class="time-slot" onclick="selectSlot('16:00', this)">16:00</div>
+                </div>
+                <div class="btn-container">
+                    <button class="btn btn-prev" onclick="goToStep(1)">⬅ Retour</button>
+                    <button class="btn btn-next" id="btn-next-2" disabled onclick="goToStep(3)">Mes coordonnées ➔</button>
+                </div>
+            </div>
+
+            <div class="step-content" id="step-3">
+                <h2>Finaliser la réservation</h2>
+                
+                <div class="summary">
+                    Vous avez choisi : <br>
+                    <span id="summary-service">...</span> à <span id="summary-time">...</span> (<span id="summary-price">...</span>€)
+                </div>
+
+                <div class="form-group">
+                    <label>Prénom & Nom</label>
+                    <input type="text" id="nom" placeholder="Ex: Jean Dupont" oninput="checkForm()">
+                </div>
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" id="tel" placeholder="06 12 34 56 78" oninput="checkForm()">
+                </div>
+                
+                <div class="btn-container">
+                    <button class="btn btn-prev" onclick="goToStep(2)">⬅ Retour</button>
+                    <button class="btn btn-next" id="btn-submit" disabled onclick="submitBooking()">Confirmer le RDV ✅</button>
+                </div>
+            </div>
+
+            <div class="step-content" id="step-4" style="text-align: center;">
+                <h2 style="color: #10b981; font-size: 30px;">Réservation confirmée ! 🎉</h2>
+                <p style="margin-top: 20px; color: var(--text-muted);">Merci <strong id="success-name"></strong>. Votre rendez-vous est noté.</p>
+                <p style="margin-top: 10px;">Un SMS de confirmation vient de vous être envoyé.</p>
+                <button class="btn btn-next" style="margin-top: 30px;" onclick="location.reload()">Retour à l'accueil</button>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2026 Ciseaux & Co - Fièrement propulsé par Next Spark
+    </footer>
+
+    <script>
+        // Données de la réservation
+        let bookingData = {
+            service: null,
+            price: null,
+            time: null,
+            name: '',
+            phone: ''
+        };
+
+        // --- ETAPE 1 : Sélectionner un service ---
+        function selectService(name, price) {
+            bookingData.service = name;
+            bookingData.price = price;
+
+            // Gérer le visuel
+            document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected'));
+            event.currentTarget.classList.add('selected');
+
+            // Activer le bouton Suivant
+            document.getElementById('btn-next-1').disabled = false;
+        }
+
+        // --- ETAPE 2 : Sélectionner un créneau ---
+        function selectSlot(time, element) {
+            if (element.classList.contains('disabled')) return;
+
+            bookingData.time = time;
+
+            // Gérer le visuel
+            document.querySelectorAll('.time-slot').forEach(slot => slot.classList.remove('selected'));
+            element.classList.add('selected');
+
+            // Activer le bouton Suivant
+            document.getElementById('btn-next-2').disabled = false;
+            
+            // Préparer le résumé pour l'étape 3
+            document.getElementById('summary-service').innerText = bookingData.service;
+            document.getElementById('summary-price').innerText = bookingData.price;
+            document.getElementById('summary-time').innerText = bookingData.time;
+        }
+
+        // --- ETAPE 3 : Vérifier le formulaire ---
+        function checkForm() {
+            bookingData.name = document.getElementById('nom').value;
+            bookingData.phone = document.getElementById('tel').value;
+            
+            const btnSubmit = document.getElementById('btn-submit');
+            if (bookingData.name.length > 2 && bookingData.phone.length >= 10) {
+                btnSubmit.disabled = false;
+            } else {
+                btnSubmit.disabled = true;
+            }
+        }
+
+        // --- Navigation entre les étapes ---
+        function goToStep(stepNumber) {
+            // Masquer tout
+            document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+            // Afficher la bonne étape
+            document.getElementById(`step-${stepNumber}`).classList.add('active');
+
+            // Mettre à jour la barre de progression (sauf si étape succès)
+            if (stepNumber <= 3) {
+                document.querySelectorAll('.step-indicator').forEach((el, index) => {
+                    if (index < stepNumber) {
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        // --- Soumission finale ---
+        function submitBooking() {
+            // Ici, dans un vrai site, on enverrait les données (bookingData) à un serveur via une API (fetch).
+            // Pour le portfolio, on affiche l'écran de succès.
+            document.getElementById('success-name').innerText = bookingData.name;
+            goToStep(4);
+            document.querySelector('.progress-bar').style.display = 'none'; // Cacher la barre
+        }
+    </script>
+</body>
+</html>
