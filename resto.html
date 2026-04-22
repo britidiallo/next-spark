@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bella Ciao | Pizzeria Artisanale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+
+        :root {
+            --accent-blue: #38bdf8; /* Ton bleu ciel Next Spark */
+            --dark-gray: #1e293b;
+            --light-gray: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--white); color: var(--dark-gray); line-height: 1.6; }
+        
+        .container { width: 90%; max-width: 1100px; margin: 0 auto; }
+        
+        /* Header */
+        header { padding: 20px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--light-gray); }
+        .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: bold; }
+        .status { font-size: 0.8rem; color: #10b981; font-weight: bold; } /* Vert pour "Ouvert" */
+
+        /* Hero Section */
+        .hero { padding: 60px 0; text-align: center; background: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('PLACEHOLDER_PHOTO_PIZZA_HERO'); background-size: cover; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 10px; }
+        .hero p { color: var(--accent-blue); font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
+
+        /* Actions Rapides */
+        .cta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0; }
+        .cta-btn { padding: 15px; text-align: center; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .btn-uber { background-color: #06c167; color: white; } /* Couleur UberEats */
+        .btn-google { background-color: var(--accent-blue); color: white; }
+
+        /* Menu */
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 40px 0 20px; text-align: center; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .menu-item { padding-bottom: 15px; border-bottom: 1px dashed #cbd5e1; }
+        .item-header { display: flex; justify-content: space-between; font-weight: bold; }
+        .item-desc { font-size: 0.85rem; color: #64748b; margin-top: 5px; }
+
+        /* Infos & Horaires */
+        .info-section { background-color: var(--light-gray); padding: 50px 0; margin-top: 50px; border-radius: 20px 20px 0 0; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .hours-list { list-style: none; margin-top: 15px; }
+        .hours-list li { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #e2e8f0; }
+
+        footer { text-align: center; padding: 40px; font-size: 0.8rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <div class="logo">BELLA CIAO</div>
+            <div class="status">● OUVERT ACTUELLEMENT</div>
+        </header>
+
+        <section class="hero">
+            <p>Pizzas au feu de bois</p>
+            <h1>L'Italie s'invite à votre table.</h1>
+            <div class="cta-grid">
+                <a href="LIEN_UBER_EATS" class="cta-btn btn-uber">Commander (UberEats)</a>
+                <a href="LIEN_GOOGLE_REVIEWS" class="cta-btn btn-google">Laisser un avis</a>
+            </div>
+        </section>
+
+        <h2 class="section-title">Notre Carte</h2>
+        <div class="menu-grid">
+            <div class="menu-item">
+                <div class="item-header">
+                    <span>Margherita</span>
+                    <span>11,00€</span>
+                </div>
+                <p class="item-desc">Sauce tomate maison, mozzarella fior di latte, basilic frais, huile d'olive extra vierge.</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-header">
+                    <span>Reggina</span>
+                    <span>13,50€</span>
+                </div>
+                <p class="item-desc">Sauce tomate, mozzarella, jambon blanc, champignons de Paris frais.</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-header">
+                    <span>4 Fromages</span>
+                    <span>14,50€</span>
+                </div>
+                <p class="item-desc">Mozzarella, gorgonzola DOP, taleggio, parmesan affiné 24 mois.</p>
+            </div>
+            <div class="menu-item">
+                <div class="item-header">
+                    <span>Diavola</span>
+                    <span>14,00€</span>
+                </div>
+                <p class="item-desc">Sauce tomate, mozzarella, salami piquant italien, piments doux.</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="info-section">
+        <div class="container">
+            <div class="info-grid">
+                <div>
+                    <h3>Nous trouver</h3>
+                    <p style="margin-top:15px;">12 Rue de la Pizza<br>75000 Paris</p>
+                    <p style="margin-top:10px;"><strong>Tél :</strong> 01 23 45 67 89</p>
+                </div>
+                <div>
+                    <h3>Horaires</h3>
+                    <ul class="hours-list">
+                        <li><span>Lundi - Vendredi</span> <span>11:30 - 14:30 / 18:30 - 22:30</span></li>
+                        <li><span>Samedi</span> <span>18:30 - 23:00</span></li>
+                        <li><span>Dimanche</span> <span>Fermé</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        &copy; 2026 Bella Ciao - Réalisé par Next Spark
+    </footer>
+
+</body>
+</html>
