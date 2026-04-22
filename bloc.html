@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Écho Local | Actualités & Décryptages</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@400;600&display=swap');
+
+        /* Variables CSS pour gérer le Light/Dark mode facilement */
+        :root {
+            --bg-color: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --primary: #38bdf8; /* Bleu ciel */
+            --border-color: #e2e8f0;
+        }
+
+        /* Classe appliquée au body pour le Dark Mode */
+        .dark-mode {
+            --bg-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: #1e293b;
+            --border-color: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.3s, color 0.3s; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Open Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Merriweather', serif; }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--card-bg);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { font-size: 24px; font-weight: 700; }
+        .logo span { color: var(--primary); }
+
+        .header-actions { display: flex; gap: 20px; align-items: center; }
+        
+        /* Barre de recherche */
+        #search-input {
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            outline: none;
+        }
+
+        /* Bouton Dark Mode */
+        #theme-toggle {
+            background: none;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        #theme-toggle:hover { background-color: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- Contenu Principal --- */
+        main { max-width: 1200px; margin: 40px auto; padding: 0 5%; }
+
+        /* Filtres Catégories */
+        .categories { display: flex; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .cat-btn {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .cat-btn.active, .cat-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Grille d'articles */
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Carte Article */
+        .article-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+        }
+        .article-img {
+            height: 200px;
+            background-color: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .article-content { padding: 20px; display: flex; flex-direction: column; flex-grow: 1; }
+        .article-category {
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .article-title { font-size: 18px; margin-bottom: 10px; line-height: 1.4; }
+        .article-excerpt { color: var(--text-muted); font-size: 14px; margin-bottom: 20px; flex-grow: 1; }
+        .article-footer {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-muted);
+            font-size: 12px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        /* Message si aucun résultat */
+        #no-results {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 18px;
+            margin-top: 50px;
+            display: none;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">L'Écho<span>Local</span></div>
+        <div class="header-actions">
+            <input type="text" id="search-input" placeholder="Rechercher un article...">
+            <button id="theme-toggle">🌙 Mode Sombre</button>
+        </div>
+    </header>
+
+    <main>
+        <div class="categories" id="category-filters">
+            <button class="cat-btn active" data-cat="all">À la une</button>
+            <button class="cat-btn" data-cat="Tech">Tech & Web</button>
+            <button class="cat-btn" data-cat="Commerce">Commerces Locaux</button>
+            <button class="cat-btn" data-cat="Écologie">Écologie</button>
+        </div>
+
+        <div class="articles-grid" id="articles-container">
+            <div id="no-results">Aucun article ne correspond à votre recherche.</div>
+        </div>
+    </main>
+
+    <script>
+        // --- 1. Base de données fictive d'articles ---
+        const articles = [
+            { id: 1, title: "Comment les boulangeries adoptent le Click & Collect", category: "Commerce", date: "22 Avril 2026", readTime: "4 min", excerpt: "Face aux nouvelles habitudes des consommateurs, les artisans locaux digitalisent leurs ventes." },
+            { id: 2, title: "L'intelligence artificielle au service des petites entreprises", category: "Tech", date: "20 Avril 2026", readTime: "6 min", excerpt: "Pas besoin d'être une multinationale pour utiliser l'IA. Découvrez des outils simples pour gagner du temps." },
+            { id: 3, title: "La ville inaugure son nouveau parc solaire", category: "Écologie", date: "18 Avril 2026", readTime: "3 min", excerpt: "Un projet qui devrait couvrir 15% des besoins énergétiques de la commune d'ici 2027." },
+            { id: 4, title: "Référencement local : 5 astuces pour être visible sur Google", category: "Tech", date: "15 Avril 2026", readTime: "5 min", excerpt: "Optimisez votre fiche Google My Business et attirez les clients de votre quartier." },
+            { id: 5, title: "Le renouveau des friperies en centre-ville", category: "Commerce", date: "12 Avril 2026", readTime: "4 min", excerpt: "L'économie circulaire attire une nouvelle clientèle, plus jeune et soucieuse de son impact environnemental." },
+            { id: 6, title: "Zéro déchet : ces restaurants qui montrent l'exemple", category: "Écologie", date: "10 Avril 2026", readTime: "5 min", excerpt: "Compostage, circuits courts et réduction des emballages : enquête sur une tendance de fond." }
+        ];
+
+        const container = document.getElementById('articles-container');
+        const noResultsMsg = document.getElementById('no-results');
+        let currentFilter = 'all';
+        let currentSearch = '';
+
+        // --- 2. Fonction d'affichage dynamique ---
+        function renderArticles() {
+            // Nettoyer le conteneur (sauf le message no-results)
+            const cards = container.querySelectorAll('.article-card');
+            cards.forEach(card => card.remove());
+
+            // Filtrer les articles selon la catégorie et la recherche
+            const filteredArticles = articles.filter(article => {
+                const matchCategory = currentFilter === 'all' || article.category === currentFilter;
+                const matchSearch = article.title.toLowerCase().includes(currentSearch.toLowerCase()) || article.excerpt.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchCategory && matchSearch;
+            });
+
+            // Afficher ou masquer le message "Aucun résultat"
+            noResultsMsg.style.display = filteredArticles.length === 0 ? 'block' : 'none';
+
+            // Créer le HTML pour chaque article filtré
+            filteredArticles.forEach(article => {
+                const card = document.createElement('div');
+                card.className = 'article-card';
+                card.innerHTML = `
+                    <div class="article-img">[Image d'illustration]</div>
+                    <div class="article-content">
+                        <div class="article-category">${article.category}</div>
+                        <h2 class="article-title">${article.title}</h2>
+                        <p class="article-excerpt">${article.excerpt}</p>
+                        <div class="article-footer">
+                            <span>📅 ${article.date}</span>
+                            <span>⏱️ ${article.readTime}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // --- 3. Gestion des filtres par catégorie ---
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Gérer la classe active
+                document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                
+                // Mettre à jour le filtre et relancer l'affichage
+                currentFilter = e.target.getAttribute('data-cat');
+                renderArticles();
+            });
+        });
+
+        // --- 4. Gestion de la recherche en temps réel ---
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            currentSearch = e.target.value;
+            renderArticles();
+        });
+
+        // --- 5. Gestion du Dark Mode ---
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeToggleBtn.innerText = '☀️ Mode Clair';
+            } else {
+                themeToggleBtn.innerText = '🌙 Mode Sombre';
+            }
+        });
+
+        // Initialisation au chargement de la page
+        renderArticles();
+    </script>
+</body>
+</html>
