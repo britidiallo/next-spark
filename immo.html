@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon Immobilier | Votre agence locale</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap');
+
+        :root {
+            --primary: #38bdf8; /* Bleu Next Spark */
+            --primary-dark: #0284c7;
+            --bg-color: #f4f4f5;
+            --white: #ffffff;
+            --text-dark: #18181b;
+            --text-light: #71717a;
+            --border: #e4e4e7;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Lato', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-dark); line-height: 1.5; }
+
+        /* --- En-tête --- */
+        header {
+            background-color: var(--white);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .logo { font-size: 24px; font-weight: 900; letter-spacing: 1px; color: var(--text-dark); }
+        .logo span { color: var(--primary); }
+        
+        .contact-btn {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .contact-btn:hover { background-color: var(--primary-dark); }
+
+        /* --- Hero Section --- */
+        .hero {
+            background: linear-gradient(rgba(24, 24, 27, 0.7), rgba(24, 24, 27, 0.7)), url('PLACEHOLDER_PHOTO_MAISON') center/cover;
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            text-align: center;
+            padding: 0 20px;
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; font-weight: 300; }
+
+        /* --- Filtres --- */
+        .filter-container {
+            background: var(--white);
+            max-width: 800px;
+            margin: -40px auto 40px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 30px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        /* --- Grille des Biens --- */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5% 60px;
+        }
+        .property-card {
+            background: var(--white);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s;
+            position: relative;
+        }
+        .property-card:hover { transform: translateY(-5px); }
+        
+        .property-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--primary-dark);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .property-img {
+            height: 220px;
+            background-color: #d4d4d8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-style: italic;
+            position: relative;
+        }
+
+        .property-content { padding: 20px; }
+        .property-price { font-size: 24px; font-weight: 900; color: var(--primary); margin-bottom: 5px; }
+        .property-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: var(--text-dark); }
+        .property-location { color: var(--text-light); font-size: 14px; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        
+        .property-features {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            font-size: 14px;
+            color: var(--text-light);
+            font-weight: 700;
+        }
+
+        /* Message aucun résultat */
+        .no-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            font-size: 18px;
+            color: var(--text-light);
+            display: none;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--text-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 30px;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">HORIZON<span>IMMO</span></div>
+        <a href="#" class="contact-btn">Nous confier un bien</a>
+    </header>
+
+    <section class="hero">
+        <h1>Trouvez le bien de vos rêves</h1>
+        <p>L'expertise locale pour vos projets d'achat et de location.</p>
+    </section>
+
+    <div class="filter-container">
+        <button class="filter-btn active" data-type="all">Tous les biens</button>
+        <button class="filter-btn" data-type="Achat">À Vendre</button>
+        <button class="filter-btn" data-type="Location">À Louer</button>
+    </div>
+
+    <main class="properties-grid" id="grid">
+        <div class="no-result" id="no-result">Aucun bien disponible dans cette catégorie pour le moment.</div>
+    </main>
+
+    <footer>
+        &copy; 2026 Horizon Immobilier. Un site réalisé par Next Spark.
+    </footer>
+
+    <script>
+        // --- BASE DE DONNÉES DES BIENS ---
+        const properties = [
+            {
+                id: 1,
+                type: "Achat",
+                title: "Maison d'architecte lumineuse",
+                location: "Quartier Sud, Centre-ville",
+                price: 450000,
+                rooms: 5,
+                surface: 120,
+                imgText: "[Photo Extérieur Maison]"
+            },
+            {
+                id: 2,
+                type: "Location",
+                title: "Appartement T2 refait à neuf",
+                location: "Proche Gare",
+                price: 750, // Loyer mensuel
+                rooms: 2,
+                surface: 45,
+                imgText: "[Photo Salon Appartement]"
+            },
+            {
+                id: 3,
+                type: "Achat",
+                title: "Loft atypique avec verrière",
+                location: "Hyper-centre",
+                price: 320000,
+                rooms: 3,
+                surface: 85,
+                imgText: "[Photo Loft Verrière]"
+            },
+            {
+                id: 4,
+                type: "Location",
+                title: "Studio meublé étudiant",
+                location: "Campus Universitaire",
+                price: 450,
+                rooms: 1,
+                surface: 22,
+                imgText: "[Photo Studio]"
+            },
+            {
+                id: 5,
+                type: "Achat",
+                title: "Maison familiale avec grand jardin",
+                location: "Périphérie Ouest",
+                price: 285000,
+                rooms: 6,
+                surface: 140,
+                imgText: "[Photo Jardin]"
+            },
+            {
+                id: 6,
+                type: "Achat",
+                title: "Local commercial avec vitrine",
+                location: "Rue piétonne principale",
+                price: 190000,
+                rooms: 2,
+                surface: 60,
+                imgText: "[Photo Devanture]"
+            }
+        ];
+
+        const grid = document.getElementById('grid');
+        const noResult = document.getElementById('no-result');
+
+        // Formateur de prix (ajoute les espaces pour les milliers + le symbole €)
+        const formatPrice = (price, type) => {
+            const formatted = new Intl.NumberFormat('fr-FR').format(price) + " €";
+            return type === "Location" ? formatted + " / mois" : formatted;
+        };
+
+        // --- FONCTION D'AFFICHAGE ---
+        function renderProperties(filterType = "all") {
+            // Nettoyage de la grille (sauf le message no-result)
+            const cards = grid.querySelectorAll('.property-card');
+            cards.forEach(card => card.remove());
+
+            // Filtrage des biens
+            const filtered = properties.filter(prop => filterType === "all" || prop.type === filterType);
+
+            // Gestion de l'affichage du message "Aucun résultat"
+            if (filtered.length === 0) {
+                noResult.style.display = "block";
+            } else {
+                noResult.style.display = "none";
+                
+                // Création des cartes
+                filtered.forEach(prop => {
+                    const card = document.createElement('div');
+                    card.className = 'property-card';
+                    card.innerHTML = `
+                        <div class="property-badge">${prop.type}</div>
+                        <div class="property-img">${prop.imgText}</div>
+                        <div class="property-content">
+                            <div class="property-price">${formatPrice(prop.price, prop.type)}</div>
+                            <h3 class="property-title">${prop.title}</h3>
+                            <div class="property-location">📍 ${prop.location}</div>
+                            <div class="property-features">
+                                <span>🏠 ${prop.rooms} Pièces</span>
+                                <span>📏 ${prop.surface} m²</span>
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // --- GESTION DES BOUTONS DE FILTRAGE ---
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Mise à jour visuelle des boutons
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+
+                // Lancement de l'affichage avec le nouveau filtre
+                const type = e.target.getAttribute('data-type');
+                renderProperties(type);
+            });
+        });
+
+        // Affichage initial au chargement
+        renderProperties();
+    </script>
+</body>
+</html>
